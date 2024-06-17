@@ -1,0 +1,47 @@
+<!-- templates/cars/car_detail.html -->
+{% extends 'base.html' %}
+{% block title %}{{ car.make }} {{ car.model }}{% endblock %}
+{% block content %}
+<h1>{{ car.make }} {{ car.model }} ({{ car.year }})</h1>
+<img src="{{ car.image.url }}" alt="{{ car.make }} {{ car.model }}" style="max-width:300px; height:auto;">
+<p>Price: ${{ car.price }}</p>
+<p>Description: {{ car.description }}</p>
+<p>Category: {{ car.category }}</p>
+
+<div class="container">
+    {% if reviews %}
+        <h2>Reviews</h2>
+        <ul>
+            {% for review in reviews %}
+            <li>{{ review.user.user.username }} rated {{ review.rating }}/5: {{ review.comment }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    <p>There is no review for this car.</p>
+    {% endif %}
+</div>
+
+{% if request.user.is_authenticated %}
+    {% if request.user.userprofile.user_type == 'customer' %}
+        <div class="container">
+            <h2>Add a Review</h2>
+            <form method="post" action="{% url 'cars:add_review' car.id %}">
+                {% csrf_token %}
+                {{ review_form.as_p }}
+                <button type="submit" class="btn btn-primary" name="review_submit">Submit Review</button>
+            </form>
+
+            <h2>Add to Wishlist</h2>
+            <form method="post" action="{% url 'cars:add_to_wishlist' car.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" name="wishlist_submit">Add to Wishlist</button>
+            </form>
+        </div>
+
+    {% else %}
+        <p>User is not a customer, so you cannot add a review and add to wishlist.</p>
+    {% endif %}
+{% else %}
+    <p>User is not authenticated</p>
+{% endif %}
+{% endblock %}

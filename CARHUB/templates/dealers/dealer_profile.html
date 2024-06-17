@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Dealer Profile{% endblock %}
+
+{% block content %}
+<h1>{{ dealer_profile.company_name }}</h1>
+<p>{{ dealer_profile.company_address }}</p>
+<p>{{ dealer_profile.email }}</p>
+<p>{{ dealer_profile.phone_number }}</p>
+<p>{{ dealer_profile.bio }}</p>
+<p>{{ dealer_profile.contact_info }}</p>
+
+<h2>Cars</h2>
+<ul>
+    {% for car in cars %}
+        <li>
+            {{ car.make }} {{ car.model }} - Wishlist Count: {{ wishlist_counts.car.id }}
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

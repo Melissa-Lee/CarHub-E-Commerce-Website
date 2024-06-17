@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <h1 class="mb-4">Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% if user.userprofile.user_type == 'dealer' %}
+
+        <div class="container">
+            {% if user.is_authenticated and user.userprofile.user_type == 'dealer' %}
+                <a href="{% url 'cars:add_car' %}" class="btn btn-success">Add Car</a>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Cars Listed</h5>
+                    <p class="card-text">{{ total_cars }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Sales (Wishlists)</h5>
+                    <p class="card-text">{{ total_wishlists }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Reviews</h5>
+                    <ul>
+                        {% for review in recent_reviews %}
+                        <li>{{ review.user.username }}: {{ review.comment }} ({{ review.rating }} stars)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% elif user.userprofile.user_type == 'customer' %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Wishlist Summary</h5>
+                    <ul>
+                        {% for item in wishlist_items %}
+                        <li>{{ item.car.make }} {{ item.car.model }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Latest Reviews</h5>
+                    <ul>
+                        {% for review in latest_reviews %}
+                        <li>{{ review.car.make }} {{ review.car.model }}: {{ review.comment }} ({{ review.rating }} stars)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

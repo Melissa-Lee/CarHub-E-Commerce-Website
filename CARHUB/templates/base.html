@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}CarHub Online Showroom{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">  
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/Logo.png' %}">
+</head>
+<body>
+    <!-- Header with logo -->
+    
+    <nav id="topNavBar" class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/" style="color: white;">
+                <img src="{% static 'img/Logo.png' %}" alt="CarHub Logo" style="height: 40px; margin-right: 10px;">
+                CarHub Online Showroom
+            </a>
+            <div class="navbar-nav">
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{% url 'authentication:logout' %}">Sign Out</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'authentication:login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'authentication:register' %}">Register</a>
+                </li>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            {% if user.is_authenticated %}
+            <div id="leftNavBar" class="col-auto">
+                <div class="d-flex flex-column pt-2">
+                    <ul class="nav nav-pills flex-column ml-auto">
+                        <li class="nav-item">
+                            <a href="/" class="nav-link {% if request.resolver_match.url_name == "dashboard" %}active{% endif %}">
+                                Dashboard
+                            </a>
+                        </li>
+                        {% if user.userprofile.user_type == 'customer' %}
+                        <li class="nav-item">
+                            <a href="{% url 'cars:showroom' %}" class="nav-link {% if request.resolver_match.url_name == "showroom" %}active{% endif %}">
+                                Showroom
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'cars:wishlist' %}" class="nav-link {% if request.resolver_match.url_name == "wishlist" %}active{% endif %}">
+                                My Wishlist
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'dealers:dealer_list' %}" class="nav-link {% if request.resolver_match.url_name == "dealer_list" %}active{% endif %}">
+                                List of Dealers
+                            </a>
+                        </li>
+                        {% elif user.userprofile.user_type == 'dealer' %}
+                        <li class="nav-item">
+                            <a href="{% url 'dealers:manage_cars' %}" class="nav-link {% if request.resolver_match.url_name == "manage_cars" %}active{% endif %}">
+                                Manage Car Listings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'dealers:update_profile' %}" class="nav-link {% if request.resolver_match.url_name == "update_profile" %}active{% endif %}">
+                                Update Dealer Profile
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            <div id="mainContent" class="col py-3">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-center mt-4">
+        <p>&copy; 2024 CarHub Inc. | Student Name: Lee Xing Yii | Student ID: 23072493</p>
+    </footer>
+
+    <!-- Bootstrap JavaScript and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

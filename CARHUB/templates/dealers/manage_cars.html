@@ -1,0 +1,33 @@
+<!-- templates/dealers/manage_cars.html -->
+{% extends 'base.html' %}
+
+{% block title %}Manage Cars{% endblock %}
+
+{% block content %}
+<h1>Manage Cars</h1>
+<div class="car-listings row">
+    {% for car in cars %}
+    <div class="car-item col-md-4 mb-4">
+        <div class="card">
+            <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.make }} {{ car.model }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ car.make }} {{ car.model }}</h5>
+                <p class="card-text">Sales (Wishlist Count): {{ car.wishlist_count }}</p>
+                <p class="card-text">Year: {{ car.year }}</p>
+                <p class="card-text">Price: ${{ car.price }}</p>
+                <p class="card-text">Category: {{ car.category.name }}</p>
+                <a href="{% url 'cars:car_detail' car.id %}" class="btn btn-info mr-2">
+                    <i class="fas fa-info-circle"></i> View Details
+                </a>
+                <a href="{% url 'cars:update_car' car.id %}" class="btn btn-warning mr-2">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'cars:delete_car' car.id %}" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Delete
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
